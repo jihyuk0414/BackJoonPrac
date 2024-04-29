@@ -1,26 +1,22 @@
 answer = 0 
 
-def DFS(k,cnt,dungeons,dungeonnumber,graph) :
-    
-    global answer
-     
-    
-    if cnt > answer:
-        answer = cnt 
-    
-    
-    for i in range(0,dungeonnumber) :
-        if (graph[i] == 0) and (dungeons[i][0] <= k) :
-            graph[i]= 1
-            DFS(k-dungeons[i][1],cnt+1,dungeons,dungeonnumber,graph)
-            graph[i]= 0 
-    return
+def DFS(arr, nowpoint,visited,cnt) :
 
+    global answer
+    
+    for i in range(len(arr)) :
+        if nowpoint >= arr[i][0] and visited[i]==False :
+            visited[i] = True
+            DFS(arr,nowpoint-arr[i][1],visited,cnt+1)
+            visited[i] = False
+    
+    answer = max(answer,cnt)
 
 def solution(k, dungeons):
-    dungeonnumber = len(dungeons)
-    graph = [0] * dungeonnumber
+
+    visited= [False] * (len(dungeons))
     
-    DFS(k,0,dungeons,dungeonnumber,graph)
-         
+    DFS(dungeons,k,visited,0)
+
+    
     return answer
