@@ -1,30 +1,26 @@
 def solution(progresses, speeds):
-    answerarr = []
-    doday = 0 
-    answerdict = {}
-    
-    for i in range(len(progresses)) : 
-        day = 0 
-        lefttime = (100-progresses[i])
-        while True : 
-            if lefttime <= 0 :
-                answerarr.append(day)
-                break
-            lefttime = lefttime - speeds[i]
-            day +=1
-    print(answerarr)
-    
-    for i in range(len(answerarr)) :
-        if i == 0 :
-            answerdict[answerarr[i]] = 1
-            continue
-        maxvalue = max(answerdict.keys()) 
+    answer = []
+    day = 0
+    while len(progresses)!=0 :
+        day+=1
         
-        if answerarr[i] <= maxvalue : 
-            answerdict[maxvalue] += 1
+        for i in range(len(speeds)) :
+            progresses[i]+= speeds[i] #하루마다 추가 .
+            
+        change= False
+        bapocnt =0
         
-        else :
-            answerdict[answerarr[i]] = 1
-    return list(answerdict.values())        
-  
+        if progresses[0] >= 100 : #배포할게 있다면
+            while True :
+                progresses.pop(0)
+                speeds.pop(0)
+                bapocnt+=1
+                change=True
+                    
+                if len(progresses) == 0 or progresses[0] < 100 :
+                    break
         
+        if change == True:
+            answer.append(bapocnt)
+        
+    return answer
