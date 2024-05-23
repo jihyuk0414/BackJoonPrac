@@ -1,41 +1,33 @@
 from collections import deque
 
-def BFS(x,y,maps) :
-    nx = [-1,1,0,0]
-    ny = [0,0,-1,1]
+def solution(maps):
+    visited = [[False] * len(maps[0]) for i in range(len(maps))]
+    print(visited)
     
-    M = len(maps)
-    N = len(maps[0])
+    q = deque()
+    dx = [-1,1,0,0]
+    dy= [0,0,-1,1]
+    q.append([0,0,0])
     
-    q= deque()
-    q.append([x,y])
-    
-    graph = [ [True] * N for _ in range(M)]
-    
-    graph[0][0] = False
-    
-    while q:  
-        poparr = q.popleft()
-        xstart = poparr[0]
-        ystart = poparr[1]
+    while q :
+        movelist = q.popleft()
+        x = movelist[0]
+        y = movelist[1]
+        cnt = movelist[2]
+        
+        if (x == len(maps)-1) and (y == len(maps[0])-1) :
+            return cnt+1
         
         for i in range(4) :
-            dx = xstart+nx[i]
-            dy = ystart+ny[i]
-        
-            if (0<=dx<M and 0<=dy<N) and maps[dx][dy] == 1 :
-                if graph[dx][dy] == True  :
-                    graph[dx][dy] = False
-                    maps[dx][dy]= maps[xstart][ystart]+1
-                    q.append([dx,dy])
-                
-        
-    if maps[M-1][N-1] != 1 :
-        return maps[M-1][N-1]
-    else :
-        return -1
-              
-
-def solution(maps):
-    
-    return BFS(0,0,maps)    
+            nx = x+dx[i]
+            ny = y+dy[i]
+            
+            if 0<=nx<len(maps) and 0<=ny<len(maps[0]) and visited[nx][ny] == False:
+                #방문안했을때
+                if maps[nx][ny] == 1 :
+                    visited[nx][ny] = True
+                    q.append([nx,ny,cnt+1])
+                    
+    return -1
+                    
+      
