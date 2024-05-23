@@ -1,26 +1,28 @@
 def solution(answers):
-    answer = []
+    onelist = [1,2,3,4,5] * 2000
+    twolist = [2,1,2,3,2,4,2,5] * 1250
+    threelist = [3,3,1,1,2,2,4,4,5,5] *1000
     
-    a1= [1,2,3,4,5]
-    a2=[2,1,2,3,2,4,2,5]
-    a3= [3,3,1,1,2,2,4,4,5,5]
-    c1,c2,c3=0,0,0
-    for i in range(len(answers)):
-        if answers[i] == a1[i%5] :
-            c1 += 1
-        if answers[i] == a2[i%8] :
-            c2 += 1
-        if answers[i] == a3[i%10] :
-            c3 += 1
-
-    maxcnt = max(c1,c2,c3)
-    if c1 == maxcnt : 
+    onecnt = 0
+    twocnt = 0
+    threecnt = 0
+    
+    for i in range(len(answers)) :
+        if answers[i] == onelist[i] :
+            onecnt +=1
+        if answers[i] == twolist[i] :
+            twocnt +=1
+        if answers[i] == threelist[i] :
+            threecnt +=1
+            
+    answer = []
+    maxcnt = max(onecnt,twocnt,threecnt)
+    if onecnt == maxcnt:
         answer.append(1)
-    if c2 == maxcnt : 
+    if twocnt == maxcnt:
         answer.append(2)
-    if c3 == maxcnt : 
+    if threecnt == maxcnt:
         answer.append(3)
         
+    print(onecnt,twocnt,threecnt)
     return answer
-    
-    
