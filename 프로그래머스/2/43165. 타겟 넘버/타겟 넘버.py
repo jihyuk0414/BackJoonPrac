@@ -1,30 +1,23 @@
-import sys
-sys.setrecursionlimit(10000000)
-
-cnt = 0
-
-def DFS(x,totalval,numbers,target) :
-    global cnt 
+answer = 0 
+def DFS(startindex,sumcnt,n,numbers,target) :
+    #종단 조건
+    global answer
     
-
-    
-    if x == len(numbers):
-        if totalval == target :
-            cnt+=1
+    if startindex == n-1 :
+        #마지막이고
+        if sumcnt == target :
+            answer +=1 
             return
+            
     
-    if (0<=x<len(numbers)) :
-        DFS(x+1,totalval+numbers[x],numbers,target)
-        DFS(x+1,totalval-numbers[x],numbers,target)
-    return
+    if 0<=startindex+1<n :
+        DFS(startindex+1,sumcnt+numbers[startindex+1],n,numbers,target)
+        DFS(startindex+1,sumcnt-numbers[startindex+1],n,numbers,target)
+
+        
 
 def solution(numbers, target):
-    global cnt 
-    DFS(0,0,numbers,target)
-    return cnt
-    
-    #여기가 일반 바닥이라고 생각하자 . input은 받은거야
-    
+    n = len(numbers) 
+    DFS(-1,0,n,numbers,target)
+    return answer
 
-    
-    
