@@ -1,54 +1,57 @@
 import sys
 
-N = int(sys.stdin.readline())
+N = int(input())
 
-Narr = []
+graph = []
 
-for i in range(N) :
-    Narr.append(list(map(int,sys.stdin.readline().split())))
+for i in range(N):
+    graph.append(list(map(int,sys.stdin.readline().split())))
 
-zerosum= 0
-onesum= 0
-minussum = 0
 
-def DFS(x,y,N) :
+#분할 정복
 
-    global zerosum
-    global onesum
-    global minussum
+onecnt =0
+zerocnt =0
+minuscnt = 0
 
-    color = Narr[x][y]
+def divide(row,col,size) :
 
-    for i in range(x,x+N) :
-        for j in range(y,y+N) :
+    global zerocnt
+    global onecnt
+    global minuscnt
 
-            if Narr[i][j] != color :
-                DFS(x,y,N//3)
-                DFS(x+N//3,y,N//3)
-                DFS(x+(N//3)*2,y,N//3)
-                DFS(x,y+N//3,N//3)
-                DFS(x,y+(N//3)*2,N//3)
-                DFS(x+N//3,y+N//3,N//3)
-                DFS(x+N//3,y+(N//3)*2,N//3)
-                DFS(x+N//3*2,y+(N//3),N//3)
-                DFS(x+(N//3)*2,y+(N//3)*2,N//3)
+    color = graph[row][col]
+
+    for i in range(row,row+size):
+        for j in range(col,col+size):
+
+            if graph[i][j] != color :
+                #색이 다르다?
+
+                divide(row,col,size//3)
+                divide(row+size//3,col,size//3)
+                divide(row+size//3*2,col,size//3)
+
+                divide(row,col+size//3,size//3)
+                divide(row,col+size//3*2,size//3)
+
+                divide(row+size//3,col+size//3,size//3)
+                divide(row+size//3,col+size//3*2,size//3)
+
+                divide(row+size//3*2,col+size//3,size//3)
+                divide(row+size//3*2,col+size//3*2,size//3)
                 return
-    if color == 1 :
-        onesum += 1
-        return
 
-    elif color == -1 :
-        minussum += 1
-        return
+    #문제가 없다면
+    if color == 0 :
+        zerocnt +=1
+    elif color == 1:
+        onecnt+=1
+    else:
+        minuscnt+=1
 
-    else :
-        zerosum += 1
-        return
+divide(0,0,N)
 
-DFS(0,0,N)
-print(minussum)
-print(zerosum)
-
-print(onesum)
-
-
+print(minuscnt)
+print(zerocnt)
+print(onecnt)
