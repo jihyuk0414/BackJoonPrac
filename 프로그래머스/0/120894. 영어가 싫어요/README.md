@@ -1,6 +1,6 @@
 # [level 0] 영어가 싫어요 - 120894 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/120894?language=java) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/120894) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 07월 25일 19:29:58
+2024년 07월 25일 19:30:26
 
 ### 문제 설명
 
