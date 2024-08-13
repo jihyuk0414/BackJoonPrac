@@ -3,17 +3,26 @@ import java.lang.*;
 import java.io.*;
 
 class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         
-        Scanner sc = new Scanner(System.in) ; 
-        int N = sc.nextInt();
-        int M = sc.nextInt();
+        String[] firstLine = br.readLine().split(" ");
+        int N = Integer.parseInt(firstLine[0]);
+        int M = Integer.parseInt(firstLine[1]);
+
+        // Scanner sc = new Scanner(System.in) ; 
+        // int N = sc.nextInt();
+        // int M = sc.nextInt();
 
         int [] Nlist = new int [N];
 
+        String [] input = br.readLine().split(" ");
+
         for (int i = 0 ; i < N ; i ++)
             {
-                Nlist[i] = sc.nextInt();
+                Nlist[i] = Integer.parseInt(input[i]);
             }
 
         ArrayList<Integer> pluslist = new ArrayList<>();
@@ -62,6 +71,9 @@ class Main {
         answer *= 2 ;
         answer += Math.abs(maxdir);
 
-        System.out.println(answer);
+        bw.write(String.valueOf(answer));
+        bw.flush();
+        bw.close();
+
     }
 }
