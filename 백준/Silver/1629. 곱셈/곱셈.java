@@ -4,36 +4,41 @@ import java.io.*;
 
 // The main method must be in a class named "Main".
 class Main {
-    static long A;
-    static long B;
-    static long C;
+
+    static int onecnt = 0 ;
+    static int zerocnt = 0 ;
+    static int [][] map;
+    static int [] answer = new int [2];
+    
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        String [] inputarr = br.readLine().split(" ");
-        A = Integer.parseInt(inputarr[0]);
-        B = Integer.parseInt(inputarr[1]);
-        C = Integer.parseInt(inputarr[2]);
+        String [] oneline = br.readLine().split(" ");
+        long A = Long.parseLong(oneline[0]);
+        long B = Long.parseLong(oneline[1]);
+        long C = Long.parseLong(oneline[2]);
+        
 
-        bw.write(String.valueOf(dojob(A,B)));
+        bw.write(String.valueOf(ans(A,B,C)));
         bw.close();
-
+        
     }
 
-    public static long dojob(long A, long val)
+    public static long ans(long A, long B, long C)
     {
-        if (val == 1)
+        if (B == 1)
         {
-            return A%C;
+            return A % C; 
         }
 
-        long ans = dojob(A, val/2);
+        long now = ans(A,B/2, C);
 
-        if(val%2 == 1)
+        if (B %2 == 0 )
         {
-            return (ans * ans % C) * A % C;
+            return (now*now)%C ;
+        } else {
+            return (now*now)%C *A%C;
         }
-        return (ans * ans % C);
     }
 }
