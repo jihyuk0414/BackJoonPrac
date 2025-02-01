@@ -1,37 +1,16 @@
-import java.util.* ;
-import java.lang.* ;
-
 class Solution {
     public String solution(String s) {
-        String answer = "";
-        String [] strarr = s.split(" ");
-        int[] intarr = new int[strarr.length];
+        int minval = Integer.MAX_VALUE;
+        int maxval = Integer.MIN_VALUE;
+        String [] sarr = s.split(" ");
         
-        for (int i = 0 ;i<intarr.length; i++)
+        for (int i = 0 ; i<sarr.length; i++)
         {
-            intarr[i] = Integer.parseInt(strarr[i]);
+            int now = Integer.parseInt(sarr[i]);
+            minval = Math.min(minval, now);
+            maxval = Math.max(maxval, now);
         }
-        
-        int maxNum = Integer.MIN_VALUE;
-        int minNum = Integer.MAX_VALUE;
-        
-        for (int i = 0 ; i<intarr.length; i++)
-        {
-            if (intarr[i] <minNum)
-            {
-                minNum = intarr[i];
-            }
-            
-            if (intarr[i] > maxNum)
-            {
-                maxNum = intarr[i];
-            }
-        }
-        
-        answer += minNum;
-        answer += " ";
-        answer += maxNum;
-        
+        String answer = minval + " "+ maxval;
         return answer;
     }
 }
