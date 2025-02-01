@@ -1,23 +1,16 @@
+// 2중 루프 버전
 class Solution {
     public int[] solution(int[] prices) {
+        int len = prices.length;
+        int[] answer = new int[len];
         
-        int N = prices.length;
-        
-        int[] answer = new int[N];
-        
-        for(int i = 0 ; i<N; i++)
-        {
-            int realans = 0;
-            for(int j = i+1 ; j<N;j++)
-            {
-                realans+=1;
-                if(prices[j]<prices[i])
-                {
-                    break;
-                }
+        for(int i = 0; i < len; i++) {
+            for(int j = i + 1; j < len; j++) {
+                answer[i]++;
+                if(prices[i] > prices[j]) break;
             }
-            answer[i]=realans;
         }
+        
         return answer;
     }
 }
