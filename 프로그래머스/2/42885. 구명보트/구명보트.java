@@ -1,22 +1,51 @@
-import java.util.*; 
+import java.util.*;
+
 class Solution {
     public int solution(int[] people, int limit) {
         int answer = 0;
-        Arrays.sort(people);
         
-        int smallindex = 0;
-        int bigindex = people.length -1 ;
+        int N = people.length;
         
-        while (smallindex <= bigindex)
+        Integer [] sortpeople = new Integer[N];
+        for (int i = 0 ; i<people.length; i++)
         {
-            if (people[smallindex]+people[bigindex] <= limit)
+            sortpeople[i] = people[i];
+        }
+        
+        int start = 0 ;
+        int end = N-1;
+        
+        //1부터~n까지임 주의
+        boolean [] ok = new boolean[N];
+        Arrays.sort(sortpeople, Collections.reverseOrder());
+        
+        while (start <=end)
+        {
+            int val = sortpeople[start]+sortpeople[end];
+            
+            if (ok[start] || ok[end])
             {
-                smallindex +=1 ;
+                start +=1; 
+                continue;
             }
             
-            bigindex -= 1;
-            
-            answer+=1 ;
+            if (val > limit)
+            {
+                start +=1;
+            } else if (val <= limit) {
+                ok[start] = true;
+                ok [end] = true;
+                answer+=1;
+                end -=1;
+            } 
+        }
+        
+        for (int i = 0 ; i<ok.length ; i++)
+        {
+            if (!ok[i])
+            {
+                answer +=1;
+            }
         }
         return answer;
     }
