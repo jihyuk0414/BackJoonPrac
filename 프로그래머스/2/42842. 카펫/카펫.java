@@ -1,31 +1,32 @@
-import java.util.* ; 
+import java.util.*;
 
 class Solution {
     public int[] solution(int brown, int yellow) {
-        List<int[]> comparelist = new ArrayList<>();
-        
-        if (yellow ==1 )
-        {
-            return new int[] {3,3};
-        }
-        
-        for (int i = 1; i<=(yellow/2); i++)
+        List<int[]> answerlist=  new ArrayList<>();
+        for (int i = 1 ; i<=yellow; i ++)
         {
             if (yellow%i == 0)
             {
-                int yellowy = i;
-                int yellowx = yellow/i;
-                
-                if((yellowy+2) * (yellowx+2) - yellow == brown)
-                {
-                    return new int [] {yellowx+2,yellowy+2};
-                }
+                int [] newarr = {i, yellow/i};
+                answerlist.add(newarr);
             }
         }
         
+        
+        
+        for (int i = 0 ; i<answerlist.size() ; i++)
+        {
+            int [] nowarr = answerlist.get(i);
+            int a= nowarr[0];
+            int b = nowarr[1];
+
+            
+            if ((a+2)*(b+2) == (brown+yellow))
+            {
+                int [] newarr = {Math.max(a+2,b+2), Math.min(a+2,b+2)};
+                return newarr;
+            }
+        }
         return null;
     }
-    
-
-    
 }
