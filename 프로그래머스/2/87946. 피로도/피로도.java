@@ -1,30 +1,43 @@
+import java.util.*;
 class Solution {
-    
-    int answer = 0;
-    int N ; 
-    boolean [] visited;
-    
+    public boolean [] visited;
+    public int N,globalk; 
+    public int answer = 0;
+    public int [][] globaldungeons;
     public int solution(int k, int[][] dungeons) {
- 
-        N = dungeons.length ; 
-        
+        globaldungeons = dungeons; //최소필요, 소모
+        globalk = k;
+        N = dungeons.length;
         visited = new boolean[N];
         
-        DFS(0,k,dungeons);
+        for (int i = 0; i < N; i++)
+        {
+            if (dungeons[i][0] <= k) {  
+                visited[i] = true;    
+                backtracking(1, i, k - dungeons[i][1]);  
+                visited[i] = false;      
+            }
+        }
         
         return answer;
     }
     
-    public void DFS(int depth, int leftenergy,int[][] dungeons)
+    public void backtracking(int depth, int nowidx, int energy)
     {
-        for (int i = 0 ; i<N ; i++)
+        answer = Math.max(depth, answer);  // 도달했다 = 해당 idx까지 갈 숭 ㅣㅆ다.
+        
+        if (depth == N)
         {
-            if(visited[i] == false && dungeons[i][0] <= leftenergy)
+            return;
+        }
+        
+        for (int i = 0; i < N; i++)
+        {
+            if (!visited[i] && globaldungeons[i][0] <= energy)  
             {
-                answer = Math.max(answer,depth+1);
                 visited[i] = true;
-                DFS(depth+1, leftenergy - dungeons[i][1],dungeons);
-             visited[i] = false;
+                backtracking(depth+1, i, energy-globaldungeons[i][1]);
+                visited[i] = false;
             }
         }
     }
