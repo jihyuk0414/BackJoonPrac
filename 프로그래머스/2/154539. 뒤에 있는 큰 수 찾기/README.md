@@ -1,10 +1,10 @@
 # [level 2] 뒤에 있는 큰 수 찾기 - 154539 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/154539?language=python3) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/154539?language=java) 
 
 ### 성능 요약
 
-메모리: 106 MB, 시간: 196.18 ms
+메모리: 203 MB, 시간: 25.56 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 04월 03일 15:23:49
+2025년 02월 12일 14:13:19
 
 ### 문제 설명
 
@@ -63,6 +63,8 @@
 
 <p>입출력 예 #2<br>
 9는 뒷 큰수가 없으므로 -1입니다. 1의 뒷 큰수는 5이며, 5와 3의 뒷 큰수는 6입니다. 6과 2는 뒷 큰수가 없으므로 -1입니다. 위 수들을 차례대로 배열에 담으면 [-1, 5, 6, 6, -1, -1]이 됩니다.</p>
+
+<p>※ 공지 - 2025년 2월 10일 테스트케이스가 추가되었습니다.</p>
 
 
 > 출처: 프로그래머스 코딩 테스트 연습, https://school.programmers.co.kr/learn/challenges
