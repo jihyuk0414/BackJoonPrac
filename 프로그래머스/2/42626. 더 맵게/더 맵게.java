@@ -1,47 +1,38 @@
-import java.util.* ; 
+import java.util.*; 
 
 class Solution {
     public int solution(int[] scoville, int K) {
         int answer = 0;
-        PriorityQueue<Integer> myq = new PriorityQueue<>();
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
         
-        for(int next : scoville)
+        int n = scoville.length;
+        int cnt = 0 ;
+        
+        for (int i = 0 ; i<n ; i++)
         {
-            myq.add(next);
-        }
-        if (myq.peek() >= K)
-        {
-            return 0;
+            pq.add(scoville[i]);
         }
         
-        while (myq.size() >= 1)
+        while(pq.size() > 1)
         {
-            answer +=1 ;
-            if (myq.size() ==1)
+            if (pq.peek() >= K)
             {
-                if(myq.peek() < K)
-                {
-                    return -1;
-                } else{
-                    return answer;
-                }
+                break;
             }
             
-            int first = myq.poll();
-            int second = myq.poll();
+            //더 요리해야되면
+            cnt +=1;
+            int one = pq.poll();
+            int two = pq.poll();
             
-            myq.add(first+second*2);
-            
-            if(myq.peek() >=K) 
-            {
-                return answer;
-            } 
-
-            
+            pq.add(one+two*2);
         }
         
+        if (pq.peek() < K)
+        {
+            cnt = -1;
+        }
         
-        
-        return answer;
+        return cnt ;
     }
 }
