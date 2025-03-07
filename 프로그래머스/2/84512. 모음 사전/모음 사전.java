@@ -1,32 +1,38 @@
+import java.util.*;
+
 class Solution {
-    public int answer = 0 ;
-    public int idx = -1;
-    public char [] wordarr =  {'A','E','I','O','U'};
+    
+    public char [] mom = new char [] {'A','E','I','O','U'};
+    public List<String> strlist = new ArrayList<>();
     public int solution(String word) {
-        dfs("",word,0);
-        return answer;
+        StringBuilder sb = new StringBuilder();
+        findstr(word,sb,0);
+        for (int i = 0 ; i<strlist.size(); i++)
+        {
+            if (word.equals(strlist.get(i)))
+            {
+                return i+1;
+            }
+        }
+        return 0;
+    
     }
     
-    public void dfs(String val, String word, int depth)
-    {        
-        idx +=1;
-        
-        if (val.equals(word))
+    public void findstr (String target, StringBuilder before, int depth)
+    {
+        if(depth == 5)
         {
-            answer = idx;
             return;
         }
         
-        if (depth == 5)
+        
+        for (int i = 0 ; i<5; i++)
         {
-            return;
-        } 
-
-        for (int i =0  ; i<5;  i++)
-            {
-                dfs(val+wordarr[i], word, depth+1);
-            }
-    
+            before.append(mom[i]);
+            strlist.add(before.toString());
+            findstr(target,before,depth+1);
+            before.deleteCharAt(before.length()-1);
+        }
         
     }
 }
