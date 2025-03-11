@@ -119,8 +119,7 @@ public class Main {
 
             if (map[bluenextx][bluenexty] == 'O')
             {
-                //블루가 나오면 가지치기
-                return;
+                continue;
             }
 
             if (rednextx == bluenextx && rednexty == bluenexty) {
