@@ -54,94 +54,104 @@ public class Main {
     }
 
     public static void backtracking (int redx , int redy , int bluex, int bluey, int depth)
+{
+    if (depth >= 10)
     {
-        if (depth >=10)
+        return;
+    }
+
+    // 이 체크는 이동 전에 수행 - 시작 위치에서 이미 빨간 공이 구멍에 있는지 확인
+    if (map[redx][redy] == 'O')
+    {
+        if (map[bluex][bluey] != 'O')
         {
+            answer = Math.min(answer, depth);
             return;
+        } else {
+            return; 
         }
+    }
 
-        if (map[redx][redy] == 'O')
+    for (int i = 0; i < 4; i++)
+    {
+        int rednextx = redx;
+        int rednexty = redy;
+        int bluenextx = bluex;
+        int bluenexty = bluey;
+        
+        // 빨간 공 이동
+        boolean redInHole = false;
+        while (true)
         {
-            if (map[bluex][bluey] != 'O')
+            rednextx += dx[i];
+            rednexty += dy[i];
+            
+            if (rednextx >= N || rednexty >= M || rednextx < 0 || rednexty < 0 || map[rednextx][rednexty] == '#')
             {
-                answer = Math.min(answer,depth);
-                return;
-            } else {
-                return; 
+                rednextx -= dx[i];
+                rednexty -= dy[i];
+                break;
+            }
+
+            if (map[rednextx][rednexty] == 'O')
+            {
+                redInHole = true;
+                break;
             }
         }
 
-        //상하 좌우로 이동시키고, 해당 이동 후에 blue가 나가버리는지 검사해서 맞으면 return. 아니면 진행
-
-        for (int i= 0 ; i<4; i++)
+        // 파란 공 이동
+        boolean blueInHole = false;
+        while (true)
         {
-            int rednextx = redx;
-            int rednexty = redy;
-            int bluenextx = bluex;
-            int bluenexty = bluey;
-
-            while (true)
+            bluenextx += dx[i];
+            bluenexty += dy[i];
+            
+            if (bluenextx >= N || bluenexty >= M || bluenextx < 0 || bluenexty < 0 || map[bluenextx][bluenexty] == '#')
             {
-                //여기서는, 그냥 끝으로만 이동
-                rednextx += dx[i];
-                rednexty += dy[i];
-                
-                if (rednextx >= N || rednexty >= M || rednextx < 0 || rednexty <0 || map[rednextx][rednexty] == '#')
-                {
-                    rednextx -=dx[i];
-                    rednexty -=dy[i];
-                    break;
-                }
-
-                if (map[rednextx][rednexty] == 'O')
-                {
-                    break;
-                }
-            }
-
-            while (true)
-            {
-                bluenextx +=dx[i];
-                bluenexty +=dy[i];
-                
-                if (bluenextx >= N || bluenexty >= M || bluenextx < 0 || bluenexty <0 ||map[bluenextx][bluenexty] == '#')
-                {
-                    bluenextx -=dx[i];
-                    bluenexty -=dy[i];
-                    break;
-                }
-
-                if (map[bluenextx][bluenexty]== 'O')
-                {
-                    break;
-                }
+                bluenextx -= dx[i];
+                bluenexty -= dy[i];
+                break;
             }
 
             if (map[bluenextx][bluenexty] == 'O')
             {
-                continue;
+                blueInHole = true;
+                break;
             }
-
-            if (rednextx == bluenextx && rednexty == bluenexty) {
-       
-                int redDist = Math.abs(rednextx - redx) + Math.abs(rednexty - redy);
-                int blueDist = Math.abs(bluenextx - bluex) + Math.abs(bluenexty - bluey);
-        
-                if (redDist > blueDist) {
-                    rednextx -= dx[i];
-                    rednexty -= dy[i];
-                } else {
-                 bluenextx -= dx[i];
-                 bluenexty -= dy[i];
-                }
-            }
-    
-            if (rednextx != redx || rednexty != redy || bluenextx != bluex || bluenexty != bluey) {
-                backtracking(rednextx, rednexty, bluenextx, bluenexty, depth + 1);
-            }
-
         }
 
+        // 파란 공이 구멍에 들어가면 이 방향은 건너뛰기
+        if (blueInHole)
+        {
+            continue;
+        }
 
+        // 빨간 공이 구멍에 들어갔는지 확인
+        if (redInHole)
+        {
+            answer = Math.min(answer, depth + 1);  // 이동했으므로 depth + 1
+            continue;
+        }
+
+        // 두 공이 같은 위치에 있을 때 처리
+        if (rednextx == bluenextx && rednexty == bluenexty) {
+            int redDist = Math.abs(rednextx - redx) + Math.abs(rednexty - redy);
+            int blueDist = Math.abs(bluenextx - bluex) + Math.abs(bluenexty - bluey);
+            
+            if (redDist > blueDist) {
+                rednextx -= dx[i];
+                rednexty -= dy[i];
+            } else {
+                bluenextx -= dx[i];
+                bluenexty -= dy[i];
+            }
+        }
+
+        // 위치가 변경된 경우에만 재귀 호출
+        if (rednextx != redx || rednexty != redy || bluenextx != bluex || bluenexty != bluey) {
+            backtracking(rednextx, rednexty, bluenextx, bluenexty, depth + 1);
+        }
     }
+}
 }
