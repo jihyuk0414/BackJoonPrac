@@ -29,6 +29,8 @@ public class Main {
             Nlist.add(newarr);
         }
 
+        Nlist.sort((a, b) -> a[1] - b[1]);
+
         visited = new boolean[N+1];
 
         for (int i = 1 ; i<=N; i++)
