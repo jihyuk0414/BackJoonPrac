@@ -1,56 +1,43 @@
 import java.util.*;
-import java.io.*;
 
 public class Main {
+    static int n;
+    static int[][] tasklist;
+    static int maxx = -10;
 
-    static int N;
-    static List<int[]> Nlist = new ArrayList<>();
-    static int answer = 0;
+    // 입력을 받는 함수
+    public static void getInput() {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        tasklist = new int[n][2]; // [0] : 시간, [1] : 수익
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-        N = Integer.parseInt(br.readLine());
-
-        for (int i = 1; i <= N; i++) {
-            String[] oneline = br.readLine().split(" ");
-            int duration = Integer.parseInt(oneline[0]);
-            int cost = Integer.parseInt(oneline[1]);
-
-            // 작업의 시작 시간, 종료 시간, 비용
-            int start = i;
-            int end = start + duration - 1;
-
-            Nlist.add(new int[]{start, end, cost});
+        for (int i = 0; i < n; i++) {
+            tasklist[i][0] = sc.nextInt();
+            tasklist[i][1] = sc.nextInt();
         }
-
-        // 종료 시간을 기준으로 작업 정렬
-        Nlist.sort((a, b) -> a[1] - b[1]);
-
-        // 깊이 우선 탐색을 통해 최대 수익 계산
-        dfs(0, -1, 0);  // 현재까지 수익, 마지막 끝난 시간, 총 수익
-
-        bw.write(String.valueOf(answer));
-        bw.close();
     }
 
-    // dfs(depth, lastEnd, currentSum)
-    public static void dfs(int idx, int lastEnd, int currentSum) {
-        // 최대 수익 갱신
-        answer = Math.max(answer, currentSum);
-
-        // 모든 작업을 시도
-        for (int i = idx; i < N; i++) {
-            int[] job = Nlist.get(i);
-            int start = job[0];
-            int end = job[1];
-            int cost = job[2];
-
-            // 현재 작업을 선택할 수 있는지 확인
-            if (start > lastEnd) {
-                dfs(i + 1, end, currentSum + cost);  // 다음 작업 선택
-            }
+    // 백트래킹을 사용한 dfs 함수
+    public static void dfs(int day, int income) {
+        // 일이 끝나는 날짜가 휴가기간 뒤라면 종료
+        if (day >= n) {
+            maxx = Math.max(maxx, income);
+            return;
         }
+
+        // 일을 하지 않은 경우
+        dfs(day + 1, income);
+
+        // 일을 한 경우
+        if (day + tasklist[day][0] <= n) {
+            dfs(day + tasklist[day][0], income + tasklist[day][1]);
+        }
+    }
+
+    // 실제 실행 부분
+    public static void main(String[] args) {
+        getInput();
+        dfs(0, 0);
+        System.out.println(maxx);
     }
 }
