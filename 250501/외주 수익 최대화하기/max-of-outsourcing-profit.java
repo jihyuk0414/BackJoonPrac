@@ -1,43 +1,60 @@
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    static int n;
-    static int[][] tasklist;
-    static int maxx = -10;
 
-    // 입력을 받는 함수
-    public static void getInput() {
-        Scanner sc = new Scanner(System.in);
-        n = sc.nextInt();
-        tasklist = new int[n][2]; // [0] : 시간, [1] : 수익
+    static int N;
+    static List<int []> Nlist = new LinkedList<>();
+    static boolean [] visited;
+    static int answer = 0;
 
-        for (int i = 0; i < n; i++) {
-            tasklist[i][0] = sc.nextInt();
-            tasklist[i][1] = sc.nextInt();
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        N = Integer.parseInt(br.readLine());
+        Nlist.add(new int [] {0,0,0});
+        for (int i = 1; i<=N; i++)
+        {
+            String [] oneline = br.readLine().split(" ");
+            int start = i;
+            int end = start+Integer.parseInt(oneline[0])-1;
+            int cost = Integer.parseInt(oneline[1]);
+
+            int [] newarr = new int[3];
+            newarr[0] = start;
+            newarr[1] = end;
+            newarr[2] = cost;
+
+            Nlist.add(newarr);
         }
+
+        visited = new boolean[N+1];
+
+        dojob(1,0,0);
+
+        bw.write(String.valueOf(answer));
+        bw.close();
     }
 
-    // 백트래킹을 사용한 dfs 함수
-    public static void dfs(int day, int income) {
-        // 일이 끝나는 날짜가 휴가기간 뒤라면 종료
-        if (day >= n) {
-            maxx = Math.max(maxx, income);
+    public static void dojob(int depth, int cnt, int nowtime)
+    {
+        if (depth == N+1)
+        {
+            answer =Math.max(answer,cnt);
             return;
         }
 
-        // 일을 하지 않은 경우
-        dfs(day + 1, income);
+        visited[depth] = true;
 
-        // 일을 한 경우
-        if (day + tasklist[day][0] <= n) {
-            dfs(day + tasklist[day][0], income + tasklist[day][1]);
+        int [] now = Nlist.get(depth);
+
+        if(now[0] > nowtime)
+        {
+            dojob(depth+1,cnt+now[2],now[1]);
         }
-    }
 
-    // 실제 실행 부분
-    public static void main(String[] args) {
-        getInput();
-        dfs(0, 0);
-        System.out.println(maxx);
+        dojob(depth+1,cnt,nowtime);
+
     }
 }
