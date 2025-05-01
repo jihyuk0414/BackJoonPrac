@@ -49,7 +49,7 @@ public class Main {
 
         int [] now = Nlist.get(depth);
 
-        if(now[0] > nowtime)
+        if(now[0] >= nowtime)
         {
             dojob(depth+1,cnt+now[2],now[1]);
         }
