@@ -56,7 +56,7 @@ public class Main {
     {
         if (depth == N/2)
         {
-            List<Integer> nochoselist = new LinkedList<>();
+            List<Integer> nochoselist = new ArrayList<>();
             for (int i = 0 ; i<N; i++)
             {
                 if (!visited[i])
