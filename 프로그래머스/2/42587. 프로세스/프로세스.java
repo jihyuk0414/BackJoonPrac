@@ -3,39 +3,37 @@ import java.util.*;
 class Solution {
     public int solution(int[] priorities, int location) {
         int answer = 0;
-        Queue<int[]> nowq= new LinkedList<>();
-        PriorityQueue<Integer> pq = new PriorityQueue<>(
-        Collections.reverseOrder());
-        
+
+        Queue<int []> q = new LinkedList<>();
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
         for (int i = 0 ; i<priorities.length; i++)
         {
-            int [] newarr = new int[]{i,priorities[i]};
-            nowq.add(newarr);
-            pq.add(priorities[i]); //pq는 우선순위만
+            q.add(new int [] {priorities[i],i}); // 값, idx
+            pq.add(priorities[i]);
         }
         
-        while (!nowq.isEmpty())
+        int cnt = 1;
+        int targetval = priorities[location];
+        while(!q.isEmpty())
         {
-            int [] now = nowq.peek();
-            int nowval = now[1];//우선순위
+            int [] now = q.poll();
+
             
-            if (now[1]==pq.peek())
-            {
-                //나갈 차례가 맞다면
-                
-                answer +=1;
-                if (now[0] == location)
+            int maxval = pq.peek();
+            if (now[0] == maxval)
+            {            
+                if (now[0] == targetval && now[1] == location)
                 {
-                    return answer;
+                    //값도, idx도 맞다면 
+                    return cnt;
                 }
-                //나가긴하는데 답이 아니라면
                 pq.poll();
-                nowq.poll();
-                continue;
-            } else {
-                nowq.add(nowq.poll());
+                cnt +=1;
             }
-            
+            else
+            {
+                q.add(now);
+            }
             
         }
         
