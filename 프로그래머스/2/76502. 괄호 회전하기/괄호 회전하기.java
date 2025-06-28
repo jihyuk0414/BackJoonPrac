@@ -1,46 +1,65 @@
 import java.util.*;
+
 class Solution {
     public int solution(String s) {
-        int answer = 0;
         StringBuilder sb = new StringBuilder(s);
         
-        List<String> dolist = new ArrayList<>();
-        
-        for (int i = 0; i < s.length(); i++) {
-            char first = sb.charAt(0);
-            sb.deleteCharAt(0);
-            sb.append(first);
-            dolist.add(sb.toString());
-        }
-        
-        for (String str : dolist) {
-            if (check(str)) {
-                answer++;
-            }
-        }
-        return answer;
-    }
-    
-    public boolean check(String s) {
-        Stack<Character> stack = new Stack<>();
-        
-        for (char c : s.toCharArray()) {
-            if (c == '[' || c == '(' || c == '{') {
-                stack.push(c);
-            } else {
-                if (stack.isEmpty()) return false;
-                
-                char last = stack.peek();
-                if ((c == ']' && last == '[') ||
-                    (c == ')' && last == '(') ||
-                    (c == '}' && last == '{')) {
-                    stack.pop();
-                } else {
-                    return false;
+        //sb를 돌면서, 한개씩 회전
+        int answer = 0 ;
+        int slen = s.length();
+        for (int roll = 0 ; roll< slen; roll++)
+        {
+            char now = sb.charAt(0);
+            // 돈 값에 대해서 검사 .
+            Stack<Character> st = new Stack<Character>();
+            st.push(now);
+            for (int i = 1 ; i<sb.length(); i++)
+            {
+                Character nowchar = sb.charAt(i);
+                if (nowchar == ']')
+                {
+                    if (!st.isEmpty() && st.peek() == '[')
+                    {
+                        st.pop();
+                    }else
+                    {
+                        st.push(nowchar);
+                    }
+                } else if (nowchar == '}')
+                {
+                    if (!st.isEmpty() && st.peek() == '{')
+                    {
+                        st.pop();
+                    }else
+                    {
+                        st.push(nowchar);
+                    }
+                } else if (nowchar == ')')
+                {
+                    if (!st.isEmpty() && st.peek() == '(')
+                    {
+                        st.pop();
+                    }else
+                    {
+                        st.push(nowchar);
+                    }
+                } else
+                {
+                    st.push(nowchar);
                 }
             }
+
+            if(st.isEmpty())
+            {
+                answer +=1;
+            }
+            
+            sb.deleteCharAt(0);
+            sb.append(now);
+            
         }
         
-        return stack.isEmpty();
+    
+        return answer;
     }
 }
