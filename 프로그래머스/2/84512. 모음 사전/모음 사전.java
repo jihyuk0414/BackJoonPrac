@@ -1,38 +1,39 @@
 import java.util.*;
 
 class Solution {
-    
-    public char [] mom = new char [] {'A','E','I','O','U'};
-    public List<String> strlist = new ArrayList<>();
+    List<String> strlist = new ArrayList<>();
+    char[] aeiou = new char[]{'A','E','I','O','U'};
     public int solution(String word) {
+        int answer = 0;
+        
         StringBuilder sb = new StringBuilder();
-        findstr(word,sb,0);
-        for (int i = 0 ; i<strlist.size(); i++)
+        allfind(0,sb);
+        
+        for (int i =0; i<strlist.size(); i++)
         {
             if (word.equals(strlist.get(i)))
             {
-                return i+1;
+                answer = i+1;
+                break;
             }
         }
-        return 0;
-    
+        
+        return answer;
     }
     
-    public void findstr (String target, StringBuilder before, int depth)
+    public void allfind(int depth, StringBuilder sb)
     {
         if(depth == 5)
         {
-            return;
+            return; 
         }
         
-        
-        for (int i = 0 ; i<5; i++)
+        for (int i = 0 ; i<5;  i++)
         {
-            before.append(mom[i]);
-            strlist.add(before.toString());
-            findstr(target,before,depth+1);
-            before.deleteCharAt(before.length()-1);
+            sb.append(aeiou[i]);
+            strlist.add(sb.toString());
+            allfind(depth+1, sb);
+            sb.deleteCharAt(sb.length()-1);
         }
-        
     }
 }
