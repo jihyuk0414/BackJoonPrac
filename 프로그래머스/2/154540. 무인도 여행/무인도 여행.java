@@ -1,79 +1,64 @@
 import java.util.*;
 
 class Solution {
-    public int [] dx = {0,1,0,-1};
-    public int [] dy = {1,0,-1,0};
-    public List<Integer> answerlist = new ArrayList<>();
-    public int [][] intmap;
-    public boolean[][] visited;
-    public int N,M;
+    
+    int [] dx = new int [] {0,1,0,-1};
+    int [] dy = new int [] {1,0,-1,0};
+    boolean [][] visited ;
+    int N,M; 
+    List <Integer> answerlist = new ArrayList<>();
+    String [] globalmap ;
     public int[] solution(String[] maps) {
-        
-        intmap = new int [maps.length][maps[0].length()];
-        for (int i = 0 ; i<maps.length ; i++)
-        {
-            for (int j = 0 ; j<maps[0].length(); j++)
-            {
-                char now = maps[i].charAt(j);
-                if (now == 'X')
-                {
-                    intmap[i][j] = 0;
-                } else {
-                    intmap[i][j] = Character.getNumericValue(now);
-                }
-            }
-        }
-        
-        N = intmap.length; 
-        M = intmap[0].length; 
-        
+        N = maps.length;
+        M = maps[0].length();
         visited = new boolean[N][M];
+        globalmap = maps;
         
-        for(int i = 0 ; i<N ; i++)
+        for (int i = 0 ; i<N; i++)
         {
-            for (int j = 0 ; j<M; j++)
+            for (int j = 0 ; j<M ; j++)
             {
-                if (visited[i][j])
+                if (!visited[i][j] && globalmap[i].charAt(j) != 'X')
                 {
-                    continue;
-                }
-                if(intmap[i][j] !=0 )
-                {
-                    visited[i][j] = true;
-                    int cnt = DFS(i,j,intmap[i][j]);
-                    answerlist.add(cnt);
+                    int val = dfs(i,j,0);
+                    answerlist.add(val);
                 }
             }
         }
         
         Collections.sort(answerlist);
         
-        int [] answer = new int [answerlist.size()];
-        for (int i = 0  ; i <answerlist.size() ; i++)
+        if (answerlist.size() == 0)
         {
-            answer[i] = answerlist.get(i);
-        }
-        if (answer.length == 0)
-        {
-            answer = new int [] {-1};
+            return new int [] {-1};
         }
         
-        return answer;
+        int [] answerarr = new int [answerlist.size()];
+        
+            for (int i = 0 ; i<answerlist.size(); i++)
+            {
+                answerarr[i] = answerlist.get(i);
+            }
+        
+        return answerarr;
     }
     
-    public int DFS(int startx, int starty,int cnt)
+    public int dfs(int x, int y, int cnt)
     {
-        for (int i = 0 ;i<4; i++)
+        visited[x][y] = true;
+        cnt += Character.getNumericValue(globalmap[x].charAt(y));
+        
+        for (int i = 0 ; i<4; i++)
         {
-            int nx = startx+dx[i];
-            int ny = starty+dy[i];
+            int nx = x+dx[i];
+            int ny = y+dy[i];
             
-            if (0<=nx && nx<N && 0<=ny && ny<M)
+            if(0<=nx && nx <N && 0<= ny && ny <M )
             {
-                if (!visited[nx][ny] && intmap[nx][ny] !=0 )
+                if (!visited[nx][ny] && globalmap[nx].charAt(ny) != 'X')
                 {
-                    visited[nx][ny] =true;
-                    cnt = DFS(nx,ny,cnt+intmap[nx][ny]);
+                    //일 하고
+                    cnt = dfs(nx,ny,cnt);
                 }
             }
         }
