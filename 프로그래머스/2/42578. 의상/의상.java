@@ -1,24 +1,31 @@
-import java.util. *;
+import java.util.*;
+
 class Solution {
+    public Map<String, Set<String>> map = new HashMap<>();
     public int solution(String[][] clothes) {
         int answer = 1;
-        Map<String, Integer> mymap = new HashMap<>();
         
         for (int i = 0 ; i<clothes.length; i++)
         {
-            String what = clothes[i][0];
-            String key = clothes[i][1];
-            
-            mymap.put(key,mymap.getOrDefault(key,0)+1);
+            String [] now  = clothes[i];
+            String val = now[0];
+            String key = now[1];
+        
+            if(!map.keySet().contains(key))
+            {
+                Set<String>newset = new HashSet<>();
+                newset.add(val);
+                map.put(key,newset);
+            }else
+            {
+                map.get(key).add(val);
+            }
         }
         
-        for (String key : mymap.keySet())
+        for (String key : map.keySet())
         {
-            answer *= mymap.get(key)+1;
+            answer *= (map.get(key).size()+1);
         }
-        
-        
-
         
         return answer-1;
     }
