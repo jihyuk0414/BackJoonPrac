@@ -1,92 +1,71 @@
 import java.util.*;
 
 class Solution {
-    
-    public List<List<Integer>> connectmap = new ArrayList<>();
-    public int answer ;
-    
+    public boolean [] visited;
+    public List<List<Integer>> graph = new LinkedList<>();
     public int solution(int n, int[][] wires) {
-        answer = n+1;
+        int answer = Integer.MAX_VALUE;
         
-        for (int i = 0 ; i <= n;  i++)
+        visited = new boolean[n+1];
+        
+        for (int i  = 0 ; i<= n ; i++)
         {
-            //0은 사용하지 않고, 1~n
-            List<Integer> onelinemap = new ArrayList<>();
-            connectmap.add(onelinemap);
+            graph.add(new LinkedList<>());
         }
         
         for (int i = 0 ; i<wires.length; i++)
         {
-            int a = wires[i][0];
-            int b = wires[i][1];    
-            connectmap.get(a).add(b);
-            connectmap.get(b).add(a);
+            int[] now = wires[i];
+            int a = now[0];
+            int b = now[1];
+            graph.get(a).add(b);
+            graph.get(b).add(a);
         }
         
-        for (int z = 0 ; z<wires.length ; z++)
+        for (int i = 0 ; i<wires.length; i++ )
         {
-            int a = wires[z][0];
-            int b = wires[z][1];    
-            //하나 끊고
-connectmap.get(a).remove(Integer.valueOf(b));  // b를 Integer 객체로 변환
-connectmap.get(b).remove(Integer.valueOf(a));  
+            int [] nowcut = wires[i];
             
-            boolean [] visited = new boolean[n+1];
-            //둘의 차이 check
-            int startone = 0 ;
-            for (int i = 1; i<= n ; i++)
+            Integer a = nowcut[0];
+            Integer b = nowcut[1];
+            graph.get(a).remove(b);
+            graph.get(b).remove(a);
+            
+            for (int j = 1 ; j<graph.size(); j++)
             {
-                if (!visited[i])
+                //j는 출발 idx
+                if (!visited[j] && graph.get(j).size() !=0 )
                 {
-                    startone = i;
+                    visited[j] = true;
+                    int checkval = check(j,1);
+                    int diff = Math.abs(checkval - (n - checkval));
+                    answer = Math.min(diff, answer);
+                    visited[j] = false;
                     break;
                 }
             }
-            visited [startone] = true;
-            int acnt = check(visited, startone);
             
-            int starttwo = 0 ;
-            for (int i = 1; i<= n ; i++)
-            {
-                if (!visited[i])
-                {
-                    starttwo = i;
-                    break;
-                }
-            }
-            visited [starttwo] = true;
-            int bcnt = check(visited, starttwo);
             
-            answer = Math.min(answer,(int) Math.abs(acnt-bcnt));
-            
-            connectmap.get(a).add(b);
-            connectmap.get(b).add(a);
-            
+            graph.get(a).add(b);
+            graph.get(b).add(a);
         }
         
         return answer;
     }
     
-    public int check (boolean [] visited, int startidx)
+    public int check(int a, int cnt)
     {
-        Queue<Integer> q = new LinkedList<>();
-        q.add(startidx);
-        
-        int ans = 1;
-        while (!q.isEmpty())
+        List<Integer> now = graph.get(a);
+        for (int next : now)
         {
-            int start = q.poll();
-            List<Integer> cango = connectmap.get(start);
-            for (Integer next : cango)
+            if(!visited[next])
             {
-                if (!visited[next])
-                {
-                    visited[next] = true;
-                    q.add(next);
-                    ans +=1;
-                }
+                visited[next] = true;
+                cnt +=1;
+                cnt = check(next,cnt);
+                visited[next] = false;
             }
         }
-        return ans;
+        return cnt;
     }
 }
