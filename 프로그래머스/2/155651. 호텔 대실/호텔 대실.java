@@ -3,58 +3,50 @@ import java.util.*;
 class Solution {
     public int solution(String[][] book_time) {
         int answer = 0;
-        int [] [] int_book_time = new int [book_time.length][2];
-        for (int i = 0 ; i<book_time.length ; i++)
+        PriorityQueue<int []> pq = new PriorityQueue<>(
+        (a,b) -> 
+            {
+                return a[0]-b[0];
+            });
+        
+        for (int i = 0 ; i<book_time.length; i++)
         {
-            String [] start = book_time[i][0].split(":");
-            int startint = Integer.parseInt(start[0])*100 + Integer.parseInt(start[1]);
-            String [] end = book_time[i][1].split(":");
-            int endint = Integer.parseInt(end[0])*100 + Integer.parseInt(end[1]);
-            int_book_time[i] = new int [] {startint,endint};
+            String now = book_time[i][0];
+            String [] firstarr = now.split(":");
+            int totaltime1 = 0;
+            totaltime1+= Integer.parseInt(firstarr[0])*60;
+            totaltime1+= Integer.parseInt(firstarr[1]);
+            
+            String [] secondarr = book_time[i][1].split(":");
+            int totaltime2 = 0;
+            totaltime2+= Integer.parseInt(secondarr[0])*60;
+            totaltime2+= Integer.parseInt(secondarr[1]);
+            
+            pq.add(new int [] {totaltime1,totaltime2});
         }
         
-        
-        Arrays.sort(int_book_time, (a,b) ->
-                    {
-                        return a[0] - b[0];
-                    });
-        
-        PriorityQueue<Integer> q = new PriorityQueue<>(); // 종료
-        
-        for (int i = 0 ; i<int_book_time.length; i++)
-        {
-            int start = int_book_time[i][0];
-            int end = int_book_time[i][1];
-  
-            if (q.isEmpty())
+        PriorityQueue<int []> pq2 = new PriorityQueue<>(
+        (a,b) -> 
             {
-                q.add(end);
-                answer= Math.max(answer,q.size());
-            } else {
-                while (!q.isEmpty())  
-                {
-                    int endorigin = q.peek()+10;
-                    if (endorigin % 100 >= 60)
-                    {
-                        endorigin += 100;
-                        endorigin -= 60;
-                    }
-                    
-                    if(endorigin<= start)
-                    {
-                        q.poll();
-                    }else {
-                        break;
-                    }
-                    
-                }
-                q.add(end);
-                answer = Math.max(answer, q.size());
+                return a[1]-b[1];
+            });
+        
+        
+        while(!pq.isEmpty())
+        {
+            int [] now = pq.poll();
+            
+            while(!pq2.isEmpty() && pq2.peek()[1] <= now[0] )
+            {
+                pq2.poll();
             }
             
+            int [] newarr = new int [] {now[0],now[1]+10};
+            
+            pq2.add(newarr);
+            answer = Math.max(pq2.size(),answer);
+            
         }
-        
-        
         
         return answer;
     }
