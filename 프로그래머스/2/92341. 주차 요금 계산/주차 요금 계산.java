@@ -1,80 +1,70 @@
-import java.util.*; 
+import java.util.*;
 
 class Solution {
+    public Map<Integer, Integer> map = new HashMap<>();
+    public Map<Integer, Integer> timemap = new HashMap<>();
+    public int maxtime = 23*60+59;
     public int[] solution(int[] fees, String[] records) {
-        Map<String, Integer> mymap = new HashMap<>(); //차 번호, 분
-         Map<String, Integer> minutemap = new HashMap<>(); //차 번호, 분
         
-        for (int i =0  ; i<records.length; i++)
+        for (int i = 0 ; i<records.length; i++)
         {
-            String [] oneline = records[i].split(" ");
-            String [] starttime = oneline[0].split(":");
-            int minute = Integer.parseInt(starttime[0])*60+Integer.parseInt(starttime[1]);
-            
-            String car = oneline[1];
-            String whattodo = oneline[2];
-            
-            if (whattodo.equals("IN"))
+            String [] line = records[i].split(" ");
+            String [] startarr = line[0].split(":");
+            int time = Integer.parseInt(startarr[0])*60 + Integer.parseInt(startarr[1]);
+            int carnum = Integer.parseInt(line[1]);
+            if(line[2].equals("IN"))
             {
-                mymap.put(car, minute);
-            } else {
-                //분만 일단 넣자
+                //차번호, 입차시간.
+                map.put(carnum,time);
+            }
+            else
+            {
+                int newtime = time-map.getOrDefault(carnum,0);
+                timemap.put(carnum,newtime+timemap.getOrDefault(carnum,0));
+                map.remove(carnum);
+            }
+        }
+        
+        //출차 안된애들 확인
+        
+        
+        
+        if(!map.isEmpty())
+        {
+            //계산
+            int [] answer = new int [map.keySet().size()];
+            List<Integer> notfinish = new LinkedList<>(map.keySet());
+            
+            for(Integer carnum : notfinish)
+            {
+                int newtime = maxtime-map.getOrDefault(carnum,0);
+                timemap.put(carnum,newtime+timemap.getOrDefault(carnum,0));
+                map.remove(carnum);
+            }
+        }
+        
+        //계산
+        int [] answer = new int [timemap.keySet().size()];
+        List<Integer> keylist = new LinkedList<>(timemap.keySet());
+        
+        Collections.sort(keylist);
+        
+        int idx = 0 ;
+        for(Integer carnum : keylist)
+            {
+                int time = timemap.get(carnum);
+                int val = 0 ;
                 
-                //이미 있다면 + 
-                if (minutemap.keySet().contains(car))
+                if (time<=fees[0])
                 {
-                    int inminute = mymap.get(car);
-                    minutemap.put(car,minutemap.get(car)+ (minute-inminute));
-                }else {
-                    int inminute = mymap.get(car);
-                    minutemap.put(car,minute-inminute);
-                }
-                mymap.remove(car);
-            }
-            
-        }
-        
-        //안나온애들
-        if (!mymap.isEmpty())
-        {
-            for (String car : mymap.keySet())
-            {
-                 if (minutemap.keySet().contains(car))
+                    answer[idx] = fees[1];
+                } 
+                else
                 {
-                    int inminute = mymap.get(car);
-                    minutemap.put(car,minutemap.get(car)+ (1439-inminute));
-                }else {
-                    int inminute = mymap.get(car);
-                    minutemap.put(car,1439-inminute);
+                    answer[idx] = fees[1] + (int)Math.ceil((double)(time-fees[0])/fees[2])*fees[3];
                 }
+                idx +=1;
             }
-        }
-        
-        List<String> sortcar = new ArrayList<>(minutemap.keySet());
-        List<Integer> answerlist = new ArrayList<>();
-        Collections.sort(sortcar);
-        
-        for (String car : sortcar)
-        {
-            int minute = minutemap.get(car);
-            int cost=  0 ;
-            if (minute<=fees[0])
-            {
-                cost = fees[1];
-            } else {
-                cost = fees[1] + (int) Math.ceil((double) (minute-fees[0])/fees[2])*fees[3];
-            }
-            answerlist.add(cost);
-        }
-        System.out.println(minutemap);
-        
-        int [] answer = new int [answerlist.size()];
-        
-        for (int i = 0 ; i< answerlist.size() ; i++)
-        {
-            answer[i] = answerlist.get(i);
-        }
-        
         
         return answer;
     }
