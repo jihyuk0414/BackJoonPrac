@@ -1,38 +1,67 @@
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
+import java.lang.*;
+import java.io.*;
 
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+// The main method must be in a class named "Main".
+class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        // 첫 번째 입력 처리 (N의 크기와 Nlist)
-        int N = scanner.nextInt();
-        Set<Integer> Nset = new HashSet<>();
-        for (int i = 0; i < N; i++) {
-            Nset.add(scanner.nextInt());
-        }
+        int N = Integer.parseInt(br.readLine());
 
-        // 두 번째 입력 처리 (M의 크기와 Mlist)
-        int M = scanner.nextInt();
-        int[] Mlist = new int[M];
-        for (int i = 0; i < M; i++) {
-            Mlist[i] = scanner.nextInt();
-        }
+        String [] Nstrarr = br.readLine().split(" ");
+        int [] Narr = new int[N];
 
-        // Mlist의 각 요소가 Nset에 있는지 확인하고 출력
-        StringBuilder sb = new StringBuilder();
-        for (int i : Mlist) {
-            if (Nset.contains(i)) {
-                sb.append("1\n");
-            } else {
-                sb.append("0\n");
+        for (int i = 0 ; i<N ; i++)
+            {
+                Narr[i] = Integer.parseInt(Nstrarr[i]);
             }
-        }
+        //N
+        
+        int M = Integer.parseInt(br.readLine());
 
-        // 결과 출력
-        System.out.print(sb.toString());
+        String [] Mstrarr = br.readLine().split(" ");
+        int [] Marr = new int[M];
 
-        scanner.close();
+        for (int i = 0 ; i<M ; i++)
+            {
+                Marr[i] = Integer.parseInt(Mstrarr[i]);
+            }
+
+        Arrays.sort(Narr);
+
+        for (int i = 0 ; i<M ; i++)
+            {
+                int nowm = Marr[i];
+                int start = 0 ;
+                int end = N-1; 
+                boolean find = false;
+
+                while(start<=end)
+                    {
+                        int mid = (start+end)/2;
+                        if(nowm == Narr[mid])
+                        {
+                            find = true ;
+                            break;
+                        } else if (nowm <Narr[mid])
+                        {
+                            end = mid-1;
+                        } else {
+                            start = mid+1;
+                        }
+                    }
+
+                if(find)
+                {
+                    bw.write(1 + "\n");
+                } else {
+                    bw.write(0 + "\n");
+                }
+            }
+
+        bw.close();
+        br.close();
     }
 }
