@@ -1,45 +1,52 @@
+import java.util.*;
+
 class Solution {
     public int solution(String skill, String[] skill_trees) {
         int answer = 0;
         
-        for (int z = 0 ; z<skill_trees.length; z++)
+        Queue<Character> q = new LinkedList<>();
+        for (int i = 0 ; i<skill.length(); i++)
         {
-            String nowstring = skill_trees[z];
-            int beforeindex = -1;
-            boolean safe = true;
-            for (int i = 0 ; i<nowstring.length() ; i++)
+            q.add(skill.charAt(i));
+        }
+        
+        for (int i = 0 ; i<skill_trees.length; i++)
+        {
+            String nowstr = skill_trees[i];
+            int nowcompare = 0;
+            
+            boolean flag = true;
+            for (int j = 0 ; j<nowstr.length(); j++)
             {
-                if (skill.contains(nowstring.charAt(i)+""))
+                if (!q.contains(nowstr.charAt(j)))
                 {
-                    //조건에 맞는 애들이라면
-                    int thatidx = getidx(skill,nowstring.charAt(i));
-                    if (thatidx != beforeindex+1)
-                    {
-                        safe = false;
-                        break;
-                    } else {
-                        beforeindex+=1;
-                    }
+                    continue;
+                }
+                
+                if (q.peek() == nowstr.charAt(j))
+                {
+                    q.poll();
+                }
+                else
+                {
+                    flag = false;
+                    break;
                 }
             }
-            if (safe)
+            
+            if (flag)
             {
                 answer +=1;
             }
-        }
-        return answer;
-    }
-    
-    public int getidx (String compare, char nowchar)
-    {
-        for (int i = 0 ; i<compare.length() ; i++)
-        {
-            if (compare.charAt(i) == nowchar)
-            {
-                return i;
-            }
+            
+             q = new LinkedList<>();
+             for (int j = 0 ; j<skill.length(); j++)
+             {
+                 q.add(skill.charAt(j));
+             }
+        
         }
         
-        return -1;
+        return answer;
     }
 }
