@@ -1,62 +1,67 @@
 import java.util.*;
 
 class Solution {
-    public int nowx,nowy = 0 ;
-    public Set<String> answerset = new HashSet<>();
+    
+    public int [] dx = new int [] {1,0,-1,0};
+    public int [] dy = new int [] {0,-1,0,1};
+    
     public int solution(String dirs) {
+        int answer = 0;
+        
+        List<Character> dirlist = new ArrayList<>();
         for (int i = 0 ; i<dirs.length(); i++)
         {
-            move(dirs.charAt(i));
+            dirlist.add(dirs.charAt(i));
         }
         
-        return answerset.size();
-    }
-    
-    public void move (char whattodo)
-    {
-        int beforex = nowx;
-        int beforey = nowy;
-        if (whattodo == 'U')
+        List <String> visitlist = new ArrayList<>();
+        
+        int nowx = 0; 
+        int nowy = 0;
+        
+        for (int i = 0 ; i<dirlist.size(); i++)
         {
-            if (nowx+1 <=5)
+            char now = dirlist.get(i);
+            int beforex= nowx;
+            int beforey = nowy;
+            if (now == 'U')
+            {
+                nowy +=1;
+            }
+            else if (now == 'R')
             {
                 nowx+=1;
-            } else {
-                return;
             }
-        } else if (whattodo == 'L')
-        {
-            if (nowy-1 >=-5)
+            else if (now == 'L')
             {
-                nowy-=1;
-            }else {
-                return;
+                nowx -=1;
             }
-        }else if (whattodo == 'R')
-        {
-            if (nowy+1 <=5)
+            else if (now == 'D')
             {
-                nowy+=1;
-            }else {
-                return;
+                nowy -=1;
             }
-        }else if (whattodo == 'D')
-        {
-            if (nowx-1 >= -5)
+            
+            if (nowx < -5 || nowx > 5 || nowy < -5 || nowy > 5)
             {
-                nowx-=1;
-            }else {
-                return;
+                nowx = beforex;
+                nowy = beforey;
+                continue;
             }
-        } // 이동 완료
-        
-        String road1 = beforex+""+beforey+""+nowx+""+nowy;
-         String road2 = nowx+""+nowy+""+beforex+""+beforey;
-        if (answerset.contains(road1)||answerset.contains(road2))
-        {
-            return;
+            
+            String line1 = String.valueOf(beforex)+beforey+nowx+nowy;
+            String line2 = String.valueOf(nowx)+nowy+beforex+beforey;
+            
+            if (visitlist.contains(line1) || visitlist.contains(line2))
+            {
+                continue;
+            }
+            
+            visitlist.add(line1);
+            visitlist.add(line2);
+            
+            answer +=1;
         }
-        answerset.add(road1);
-    
+        
+        return answer;
     }
 }
