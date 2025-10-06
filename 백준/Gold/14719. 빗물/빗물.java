@@ -4,55 +4,43 @@ import java.io.*;
 
 // The main method must be in a class named "Main".
 class Main {
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static int R ; 
-    static int C;
-    static char [] [] map ;
-    static boolean[][] visited ;
-    static int [] dx = {0,1,0,-1};
-    static int [] dy = {1,0,-1,0};
-    static int answer = 1;
-    
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
         String [] oneline = br.readLine().split(" ");
         int H = Integer.parseInt(oneline[0]);
         int W = Integer.parseInt(oneline[1]);
 
-        int [] height =new int [W];
+        int [] map = new int [W];
         String [] twoline = br.readLine().split(" ");
-        for (int i =0 ; i<W ; i++)
+        for (int i = 0 ; i<W; i++)
             {
-                height[i] = Integer.parseInt(twoline[i]);
+                map[i] = Integer.parseInt(twoline[i]);
             }
+        int [] leftmaxarr= new int [W];
+        int leftmax = map[0];
+        for (int i =1; i<W; i++)
+            {
+                leftmax = Math.max(map[i],leftmax);
+                leftmaxarr[i] = leftmax;
+            }
+        int [] rightmaxarr= new int [W];
+        int rightmax = map[W-1];
+        for (int i = W-1; i>0; i--)
+            {
+                rightmax = Math.max(map[i],rightmax);
+                rightmaxarr[i] = rightmax;
+            }
+        int answer =0 ;
 
-        int answer = 0 ;
+        for (int i =1 ; i<W-1; i++)
+            {
+                int val = Math.min(rightmaxarr[i],leftmaxarr[i]);
+                answer = answer + (val-map[i]);
+            }
         
-        for (int i = 1 ; i<W-1 ;i++)
-            {
-                int leftmax = 0 ;
-                int rightmax = 0 ;
-
-                for (int j = 0; j<i; j++)
-                    {
-                        leftmax = Math.max(height[j],leftmax);
-                    }
-                for (int j = i+1; j<W; j++)
-                    {
-                        rightmax = Math.max(height[j],rightmax);
-                    }
-
-                if(height[i]<leftmax && height[i]<rightmax)
-                {
-                    answer+= (Math.min(leftmax,rightmax)-height[i]);
-                }
-                
-                
-            }
-        bw.write(answer+"");
+        bw.write(String.valueOf(answer));
         bw.close();
     }
-
- 
-    
 }
